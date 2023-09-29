@@ -5,6 +5,7 @@ import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import * as React from "react";
 import { boolean } from "zod";
+import TitleForm from "./_components/title-form";
 
 export interface IcourseIdPageProps {}
 
@@ -54,6 +55,7 @@ export default async function courseIdPage({
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">Customize your course</h2>
           </div>
+          <TitleForm initialData={course} courseId={course.id} />
         </div>
       </div>
     </div>
