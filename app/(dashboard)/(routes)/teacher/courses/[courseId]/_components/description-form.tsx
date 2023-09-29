@@ -8,24 +8,20 @@ import axios from "axios";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { Course } from "@prisma/client";
 
 export interface IDescriptionFormProps {
-  initialData: {
-    description: string | null;
-  };
+  initialData: Course;
   courseId: string;
 }
 
@@ -46,7 +42,7 @@ export default function DescriptionForm({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: initialData?.description || "",
   });
 
   const { isSubmitting, isValid } = form.formState;
