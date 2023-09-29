@@ -19,21 +19,26 @@ import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
-export interface ITitleFormProps {
+export interface IDescriptionFormProps {
   initialData: {
-    title: string;
+    description: string | null;
   };
   courseId: string;
 }
 
 const formSchema: any = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  description: z.string().min(1, {
+    message: "Description is required",
   }),
 });
 
-export default function TitleForm({ initialData, courseId }: ITitleFormProps) {
+export default function DescriptionForm({
+  initialData,
+  courseId,
+}: IDescriptionFormProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -49,7 +54,7 @@ export default function TitleForm({ initialData, courseId }: ITitleFormProps) {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course title updated");
+      toast.success("Course description updated");
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -59,19 +64,28 @@ export default function TitleForm({ initialData, courseId }: ITitleFormProps) {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="flex font-medium items-center justify-between">
-        Course title
+        Course description
         <Button variant="ghost" onClick={toggleEdit}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="mr-2 h-4 w-4" />
-              Edit title
+              Edit description
             </>
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{initialData.title}</p>}
+      {!isEditing && (
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.description && "text-slate-500 italic"
+          )}
+        >
+          {initialData.description || "No description"}
+        </p>
+      )}
       {isEditing && (
         <Form {...form}>
           <form
@@ -80,13 +94,13 @@ export default function TitleForm({ initialData, courseId }: ITitleFormProps) {
           >
             <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <Textarea
                       {...field}
-                      placeholder="e.g. 'An Introduction to React'"
+                      placeholder="e.g. 'This course is about...'"
                       disabled={isSubmitting}
                     />
                   </FormControl>
