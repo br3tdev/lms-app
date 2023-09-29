@@ -1,6 +1,6 @@
 import * as React from "react";
 import MobileSidebar from "./mobile-sidebar";
-import NavbarRoutes from "@/components/NavbarRoutes";
+import NavbarRoutes from "@/components/navbar-routes";
 
 export interface INavbarProps {}
 
