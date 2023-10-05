@@ -1,9 +1,24 @@
+import { db } from "@/lib/db";
+import Categories from "./_components/categories";
+import SearchInput from "@/components/search-input";
+
 export interface ISearchPageProps {}
 
-export default function SearchPage(props: ISearchPageProps) {
+export default async function SearchPage(props: ISearchPageProps) {
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
   return (
-    <div>
-      <h1>This is the Search page</h1>
-    </div>
+    <>
+      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+        <SearchInput />
+      </div>
+      <div className="p-6">
+        <Categories items={categories} />
+      </div>
+    </>
   );
 }
