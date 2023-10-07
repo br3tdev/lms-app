@@ -1,11 +1,30 @@
-import * as React from "react";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
 
-export interface ICourseIdPageProps {}
+export default async function CourseIdPage({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
+    },
+  });
 
-export default function CourseIdPage(props: ICourseIdPageProps) {
-  return (
-    <div>
-      <h1>course</h1>
-    </div>
+  if (!course) return redirect("/");
+
+  return redirect(
+    `/courses/${params.courseId}/chapters/${course.chapters[0].id}`
   );
 }
