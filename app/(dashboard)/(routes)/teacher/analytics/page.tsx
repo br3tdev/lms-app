@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import * as React from "react";
 import DataCard from "./_components/data-card";
-import Chart from "./_components/chart";
+import { Chart } from "./_components/chart";
 
 export interface IAnalyticsPageProps {}
 

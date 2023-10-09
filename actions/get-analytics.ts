@@ -5,7 +5,7 @@ type PurchaseWithCourse = Purchase & {
   course: Course;
 };
 
-const groupedByCourse = (purchases: PurchaseWithCourse[]) => {
+const groupByCourse = (purchases: PurchaseWithCourse[]) => {
   const grouped: { [courseTitle: string]: number } = {};
 
   purchases.forEach((purchase) => {
@@ -13,18 +13,18 @@ const groupedByCourse = (purchases: PurchaseWithCourse[]) => {
     if (!grouped[courseTitle]) {
       grouped[courseTitle] = 0;
     }
-    grouped[courseTitle] = purchase.course.price!;
+    grouped[courseTitle] += purchase.course.price!;
   });
 
   return grouped;
 };
 
-export async function getAnalytics(userId: string) {
+export const getAnalytics = async (userId: string) => {
   try {
     const purchases = await db.purchase.findMany({
       where: {
         course: {
-          userId,
+          userId: userId,
         },
       },
       include: {
@@ -32,17 +32,16 @@ export async function getAnalytics(userId: string) {
       },
     });
 
-    const groupedEarnings = groupedByCourse(purchases);
-
-    const data = Object.entries(groupedByCourse(purchases)).map(
+    const groupedEarnings = groupByCourse(purchases);
+    const data = Object.entries(groupedEarnings).map(
       ([courseTitle, total]) => ({
         name: courseTitle,
-        total,
+        total: total,
       })
     );
 
     const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
-    const totalSales = data.length;
+    const totalSales = purchases.length;
 
     return {
       data,
@@ -50,11 +49,11 @@ export async function getAnalytics(userId: string) {
       totalSales,
     };
   } catch (error) {
-    console.log("[GET_ANALYTICS_ERROR]", error);
+    console.log("[GET_ANALYTICS]", error);
     return {
       data: [],
       totalRevenue: 0,
       totalSales: 0,
     };
   }
-}
+};
