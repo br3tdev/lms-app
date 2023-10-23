@@ -6,9 +6,11 @@ async function main() {
   try {
     await database.category.createMany({
       data: [
+      	{ name: "Business" },
         { name: "Computer Science" },
         { name: "Music" },
-        { name: "Fitness" },
+        { name: "Health & Fitness" },
+        { name: "Personal Development" },
         { name: "Photography" },
         { name: "Accounting" },
         { name: "Engineering" },
