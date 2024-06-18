@@ -1,4 +1,5 @@
 import { Category, Course } from "@prisma/client";
+import Image from "next/image";
 import CourseCard from "./course-card";
 
 type CourseWithProgressWithCategory = Course & {
@@ -31,8 +32,16 @@ export default function CoursesList({ items }: ICoursesListProps) {
         ))}
       </div>
       {items.length === 0 && (
-        <div className="text-center text-sm text-muted-foreground mt-10">
-          No courses found
+        <div className="flex flex-col items-center text-center text-sm text-muted-foreground mt-10">
+          <Image
+            src={
+              "/Achievement_and_Success_achievement,_accomplishment,_flag,_clothing,_clothes,_target,_goal.svg"
+            }
+            alt="No_courses_found"
+            width={400}
+            height={400}
+          />
+          No courses found, go to Browse.
         </div>
       )}
     </div>
